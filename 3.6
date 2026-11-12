@@ -1,0 +1,112 @@
+CREATE ROLE rol_control_escolar NOLOGIN;
+
+
+
+
+
+
+CREATE USER usuario_control_escolar
+WITH PASSWORD 'Cambiar_Clave_Control_2026!';
+
+
+
+
+GRANT rol_control_escolar TO usuario_control_escolar;
+
+GRANT USAGE ON SCHEMA public
+TO rol_control_escolar;
+
+
+
+
+
+
+GRANT SELECT ON public.estudiantes
+TO rol_control_escolar;
+
+
+
+CREATE VIEW public.v_estudiantes_publico AS
+SELECT matricula, nombre
+FROM public.estudiantes;
+
+CREATE ROLE rol_consulta NOLOGIN;
+
+CREATE USER usuario_consulta
+WITH PASSWORD 'Cambiar_Clave_Consulta_2026!';
+
+GRANT rol_consulta TO usuario_consulta;
+
+
+
+
+
+
+
+GRANT USAGE ON SCHEMA public
+TO rol_consulta;
+
+
+
+GRANT SELECT ON public.v_estudiantes_publico
+TO rol_consulta;
+
+
+
+
+CREATE ROLE rol_docente NOLOGIN;
+
+CREATE USER usuario_docente
+WITH PASSWORD 'Cambiar_Clave_Docente_2026!';
+
+
+
+GRANT rol_docente TO usuario_docente;
+
+GRANT USAGE ON SCHEMA public
+TO rol_docente;
+
+
+
+GRANT SELECT ON public.calificaciones
+TO rol_docente;
+
+GRANT UPDATE (calificacion)
+ON public.calificaciones
+
+TO rol_docente;
+
+
+
+CREATE ROLE rol_caja NOLOGIN;
+
+
+CREATE USER usuario_caja
+
+WITH PASSWORD 'Cambiar_Clave_Caja_2026!';
+
+GRANT rol_caja TO usuario_caja;
+
+
+
+GRANT USAGE ON SCHEMA public
+TO rol_caja;
+
+GRANT SELECT, INSERT ON public.pagos
+TO rol_caja;
+
+
+
+
+REVOKE SELECT ON public.estudiantes
+FROM rol_control_escolar;
+
+
+
+SET ROLE usuario_control_escolar;
+SELECT * FROM public.estudiantes;
+
+
+
+
+RESET ROLE;
